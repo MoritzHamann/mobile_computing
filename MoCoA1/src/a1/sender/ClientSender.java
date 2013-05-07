@@ -51,7 +51,7 @@ public class ClientSender implements Runnable {
 			}
 			try {
 				Package rtsPackage = new Package();
-				// cts
+				// rts
 				rtsPackage.setId(0);
 				rtsPackage.setDestIP(destIP);
 				rtsPackage.setSourceIP(sourceIP);
@@ -64,6 +64,7 @@ public class ClientSender implements Runnable {
 					monitor.wait(rtsTimeout);
 				}
 				if (monitor.isCts()) {
+					//data package
 					Package dataPackage = new Package();
 					dataPackage.setSeqNumber(seqNumber);
 					dataPackage.setId(2);

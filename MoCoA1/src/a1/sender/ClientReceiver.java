@@ -15,7 +15,6 @@ public class ClientReceiver implements Runnable {
 	private Monitor monitor = null;
 
 	public ClientReceiver(String sourceIP, int port, Monitor monitor) {
-		// TODO Auto-generated constructor stub
 		this.sourceIP = sourceIP;
 		this.port = port;
 		this.monitor = monitor;
