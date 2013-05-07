@@ -4,10 +4,10 @@ public class MainClient {
 	public static Monitor monitor = new Monitor();
 	
 	public static void main(String[] args) {
-		Thread clientSender = new Thread(new ClientSender("127.0.0.1",
-				"255.255.255.255", 7000, 10, 10, monitor));
+		Thread clientSender = new Thread(new ClientSender("192.168.1.2",
+				"192.168.1.1", 7000, 100, 10, monitor));
 		Thread clientReceiver = new Thread(new ClientReceiver(
-				"255.255.255.255", 7000, monitor));
+				"192.168.1.2", 7000, monitor));
 		clientReceiver.start();
 		clientSender.start();
 	}

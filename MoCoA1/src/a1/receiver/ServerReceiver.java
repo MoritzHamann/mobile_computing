@@ -17,13 +17,21 @@ import a1.ressources.Package;
 
 public class ServerReceiver implements Runnable {
 	private HashMap<String, ArrayList<Integer>> log = new HashMap<String, ArrayList<Integer>>();
-
+	private int port;
+	private String sourceIP;
+	
+	public ServerReceiver(int port, String sourceIP) {
+		// TODO Auto-generated constructor stub
+		this.port = port;
+		this.sourceIP = sourceIP;
+	}
+	
 	@Override
 	public void run() {
 		try {
-			DatagramSocket serverSocket = new DatagramSocket(7000);
+			DatagramSocket serverSocket = new DatagramSocket(port);
 			// allocate space for received datagram
-			byte[] data = new byte[1400];
+			byte[] data = new byte[1472];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 
 			while (true) {
@@ -38,7 +46,7 @@ public class ServerReceiver implements Runnable {
 					Package ctsPackage = new Package();
 					ctsPackage.setId(1);
 					ctsPackage.setDestIP(p.getSourceIP());
-					ctsPackage.setSourceIP("127.0.0.1");
+					ctsPackage.setSourceIP(sourceIP);
 					ByteArrayOutputStream byteStream = new ByteArrayOutputStream(
 							5000);
 					ObjectOutputStream os = new ObjectOutputStream(
@@ -50,7 +58,7 @@ public class ServerReceiver implements Runnable {
 
 					byte[] sendBuf = byteStream.toByteArray();
 					packet = new DatagramPacket(sendBuf, sendBuf.length,
-							InetAddress.getByName("255.255.255.255"), 7000);
+							InetAddress.getByName("192.168.1.255"), port);
 					serverSocket.send(packet);
 					break;
 				case 1:
