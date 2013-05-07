@@ -43,6 +43,7 @@ public class ServerReceiver implements Runnable {
 				switch (p.getId()) {
 				case 0:
 					// send cts
+					System.out.println("sende cts");
 					Package ctsPackage = new Package();
 					ctsPackage.setId(1);
 					ctsPackage.setDestIP(p.getSourceIP());
@@ -58,12 +59,14 @@ public class ServerReceiver implements Runnable {
 
 					byte[] sendBuf = byteStream.toByteArray();
 					packet = new DatagramPacket(sendBuf, sendBuf.length,
-							InetAddress.getByName("192.168.1.255"), port);
+							InetAddress.getByName("192.168.1.2"), port);
 					serverSocket.send(packet);
+					System.out.println("cts gesendet");
 					break;
 				case 1:
 					break;
 				case 2:
+					System.out.println("Datenpaket erhalten");
 					ArrayList<Integer> packages = log.get(p.getSourceIP());
 					if (packages != null) {
 						packages.add(p.getSeqNumber());
@@ -91,6 +94,7 @@ public class ServerReceiver implements Runnable {
 		ObjectInputStream is = new ObjectInputStream(new BufferedInputStream(
 				byteStream));
 		a1.ressources.Package o = (a1.ressources.Package) is.readObject();
+		System.out.println("id " + o.getId());
 		is.close();
 		return o;
 	}
