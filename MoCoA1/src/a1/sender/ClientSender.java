@@ -44,7 +44,11 @@ public class ClientSender implements Runnable {
 		// send one datagram
 		while (true) {
 			try {
-				wait((long) (-1 / lambda * Math.log(Math.random())));
+				synchronized (this) {
+					wait(1000);
+					// wait((long) (-1 / lambda * Math.log(Math.random())));
+				}
+
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -64,14 +68,14 @@ public class ClientSender implements Runnable {
 					monitor.wait(rtsTimeout);
 				}
 				if (monitor.isCts()) {
-					//data package
+					// data package
 					Package dataPackage = new Package();
 					dataPackage.setSeqNumber(seqNumber);
 					dataPackage.setId(2);
 					dataPackage.setDestIP(destIP);
 					dataPackage.setSourceIP(sourceIP);
-					packet = createBytePackage(dataPackage);
-					clientSocket.send(packet);
+					DatagramPacket sendPackage = createBytePackage(dataPackage);
+					clientSocket.send(sendPackage);
 					seqNumber++;
 					monitor.setCts(false);
 				}

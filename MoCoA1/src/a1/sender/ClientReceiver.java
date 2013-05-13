@@ -25,11 +25,12 @@ public class ClientReceiver implements Runnable {
 		try {
 			DatagramSocket serverSocket = new DatagramSocket(port);
 			byte[] data = new byte[1472];
-			DatagramPacket packet = new DatagramPacket(data, data.length);
 			while (true) {
+				DatagramPacket packet = new DatagramPacket(data, data.length);
 				// receive one datagram
 				serverSocket.receive(packet);
-				a1.ressources.Package p = deserializePackage(data);
+				a1.ressources.Package p = deserializePackage(packet.getData());
+				System.out.println("ID des empfangenen Pakets beim Sender " + p.getId());
 				switch (p.getId()) {
 				case 1:
 					// notify
@@ -64,8 +65,8 @@ public class ClientReceiver implements Runnable {
 		ByteArrayInputStream byteStream = new ByteArrayInputStream(data);
 		ObjectInputStream is = new ObjectInputStream(new BufferedInputStream(
 				byteStream));
-		a1.ressources.Package o = (a1.ressources.Package) is.readObject();
+		a1.ressources.Package p = (a1.ressources.Package) is.readObject();
 		is.close();
-		return o;
+		return p;
 	}
 }

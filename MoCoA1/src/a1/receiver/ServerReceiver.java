@@ -19,27 +19,27 @@ public class ServerReceiver implements Runnable {
 	private HashMap<String, ArrayList<Integer>> log = new HashMap<String, ArrayList<Integer>>();
 	private int port;
 	private String sourceIP;
-	
+
 	public ServerReceiver(int port, String sourceIP) {
 		// TODO Auto-generated constructor stub
 		this.port = port;
 		this.sourceIP = sourceIP;
 	}
-	
+
 	@Override
 	public void run() {
 		try {
 			DatagramSocket serverSocket = new DatagramSocket(port);
+			serverSocket.setBroadcast(true);
 			// allocate space for received datagram
 			byte[] data = new byte[1472];
-			DatagramPacket packet = new DatagramPacket(data, data.length);
-
 			while (true) {
+				DatagramPacket packet = new DatagramPacket(data, data.length);
 				// receive one datagram
 				serverSocket.receive(packet);
-				System.out.println(packet.getLength());
-
-				a1.ressources.Package p = deserializePackage(data);
+				a1.ressources.Package p = deserializePackage(packet.getData());
+				System.out.println("Packet Id des empfangenen Pakets "
+						+ p.getId());
 				switch (p.getId()) {
 				case 0:
 					// send cts
@@ -49,18 +49,19 @@ public class ServerReceiver implements Runnable {
 					ctsPackage.setDestIP(p.getSourceIP());
 					ctsPackage.setSourceIP(sourceIP);
 					ByteArrayOutputStream byteStream = new ByteArrayOutputStream(
-							5000);
+							1472);
 					ObjectOutputStream os = new ObjectOutputStream(
 							new BufferedOutputStream(byteStream));
 					os.flush();
 					os.writeObject(ctsPackage);
 					os.flush();
+					os.close();
 					// retrieves byte array
-
 					byte[] sendBuf = byteStream.toByteArray();
-					packet = new DatagramPacket(sendBuf, sendBuf.length,
-							InetAddress.getByName("192.168.1.2"), port);
-					serverSocket.send(packet);
+					DatagramPacket sendPackage = new DatagramPacket(sendBuf,
+							sendBuf.length,
+							InetAddress.getByName("192.168.1.255"), port);
+					serverSocket.send(sendPackage);
 					System.out.println("cts gesendet");
 					break;
 				case 1:
