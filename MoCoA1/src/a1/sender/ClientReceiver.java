@@ -32,6 +32,8 @@ public class ClientReceiver implements Runnable {
 				a1.ressources.Package p = deserializePackage(packet.getData());
 				System.out.println("ID des empfangenen Pakets beim Sender " + p.getId());
 				switch (p.getId()) {
+				case 0:
+					break;
 				case 1:
 					// notify
 					if (p.getDestIP().equals(sourceIP)) {
@@ -40,6 +42,7 @@ public class ClientReceiver implements Runnable {
 							monitor.notify();
 						}
 					} else {
+						System.out.println("kein cts an mich warte");
 						synchronized (monitor) {
 							monitor.wait(2000);
 						}

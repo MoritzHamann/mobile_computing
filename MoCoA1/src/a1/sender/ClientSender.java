@@ -69,6 +69,7 @@ public class ClientSender implements Runnable {
 				}
 				if (monitor.isCts()) {
 					// data package
+					System.out.println("sende Datenpaket cts erhalten");
 					Package dataPackage = new Package();
 					dataPackage.setSeqNumber(seqNumber);
 					dataPackage.setId(2);
@@ -105,7 +106,7 @@ public class ClientSender implements Runnable {
 		// retrieves byte array
 		byte[] sendBuf = byteStream.toByteArray();
 		DatagramPacket packet = new DatagramPacket(sendBuf, sendBuf.length,
-				InetAddress.getByName(destIP), port);
+				InetAddress.getByName("192.168.1.255"), port);
 		os.close();
 		return packet;
 	}
