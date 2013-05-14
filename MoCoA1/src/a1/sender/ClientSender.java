@@ -47,11 +47,12 @@ public class ClientSender implements Runnable {
 		while (true) {
 			try {
 				synchronized (this) {
-					double random;
+					double random = Math.random();
+					long waitingTime;
 					do {
 						random = Math.random();
-					} while (random != 0);
-					long waitingTime = (long) ((-1.0 / lambda) * random);
+						waitingTime = (long) ((-1.0 / lambda) * Math.log(random) * 1000);
+					} while (waitingTime <= 0);
 					System.out.println("Warte vor Senden für " + waitingTime);
 					wait(waitingTime);
 				}
