@@ -22,6 +22,7 @@ public class ClientGUI {
 
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTextArea textArea;
 
 	/**
 	 * Launch the application.
@@ -99,7 +100,7 @@ public class ClientGUI {
 		frame.getContentPane().add(textField_1);
 		textField_1.setColumns(10);
 
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setBorder(new LineBorder(new Color(0, 0, 0)));
 		textArea.setPreferredSize(new Dimension(500, 250));
 		textArea.setEditable(false);
@@ -107,6 +108,7 @@ public class ClientGUI {
 		JButton btnNewButton_1 = new JButton("Stop");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				textArea.setText("Beende");
 				System.exit(0);
 			}
 		});
