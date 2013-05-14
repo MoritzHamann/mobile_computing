@@ -21,6 +21,7 @@ public class ClientGUI {
 	private JFrame frame;
 
 	private JTextField textField;
+	private JTextField textField_1;
 
 	/**
 	 * Launch the application.
@@ -50,7 +51,7 @@ public class ClientGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 681, 322);
+		frame.setBounds(100, 100, 861, 403);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(
 				new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -90,6 +91,14 @@ public class ClientGUI {
 		frmtdtxtfldRts.setMinimumSize(new Dimension(20, 20));
 		frame.getContentPane().add(frmtdtxtfldRts);
 
+		JLabel lblCts = new JLabel("cts");
+		frame.getContentPane().add(lblCts);
+
+		textField_1 = new JTextField();
+		textField_1.setText("1000");
+		frame.getContentPane().add(textField_1);
+		textField_1.setColumns(10);
+
 		JTextArea textArea = new JTextArea();
 		textArea.setBorder(new LineBorder(new Color(0, 0, 0)));
 		textArea.setPreferredSize(new Dimension(500, 250));
@@ -109,14 +118,13 @@ public class ClientGUI {
 				String destIP = frmtdtxtfldIpadresse.getText();
 				int lambda = Integer.valueOf(frmtdtxtfldLambda.getText());
 				int rtsTimeout = Integer.valueOf(frmtdtxtfldRts.getText());
+				int ctsTimeout = Integer.valueOf(textField_1.getText());
 				MainClient client = new MainClient(sourceIP, destIP, lambda,
-						rtsTimeout);
+						rtsTimeout, ctsTimeout);
 				client.startClient();
 			}
 		});
 		frame.getContentPane().add(btnNewButton_2);
 		frame.getContentPane().add(btnNewButton_1);
-
 	}
-
 }

@@ -10,8 +10,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import javax.xml.bind.ParseConversionEvent;
-
 import a1.ressources.Package;
 import a1.sender.MainClient.Monitor;
 
@@ -51,7 +49,8 @@ public class ClientSender implements Runnable {
 					long waitingTime;
 					do {
 						random = Math.random();
-						waitingTime = (long) ((-1.0 / lambda) * Math.log(random) * 1000);
+						waitingTime = (long) ((-1.0 / lambda)
+								* Math.log(random) * 1000);
 					} while (waitingTime <= 0);
 					System.out.println("Warte vor Senden für " + waitingTime);
 					wait(waitingTime);

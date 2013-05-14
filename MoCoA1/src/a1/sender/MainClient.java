@@ -6,25 +6,27 @@ public class MainClient {
 	private String sourceIP;
 	private int lambda;
 	private int rtsTimeout;
+	private int ctsTimeout;
 
-	public MainClient(String sourceIP, String destIP, int lambda, int rtsTimeout ) {
+	public MainClient(String sourceIP, String destIP, int lambda,
+			int rtsTimeout, int ctsTimeout) {
 		this.destIP = destIP;
 		this.lambda = lambda;
 		this.rtsTimeout = rtsTimeout;
 		this.sourceIP = sourceIP;
-		
+		this.ctsTimeout = ctsTimeout;
+
 	}
+
 	public void startClient() {
-		Thread clientSender = new Thread(new ClientSender(sourceIP,
-				destIP, 7000, rtsTimeout, lambda, monitor));
-		Thread clientReceiver = new Thread(new ClientReceiver(
-				sourceIP, 7000, monitor));
+		Thread clientSender = new Thread(new ClientSender(sourceIP, destIP,
+				7000, rtsTimeout, lambda, monitor));
+		Thread clientReceiver = new Thread(new ClientReceiver(sourceIP, 7000,
+				ctsTimeout, monitor));
 		clientReceiver.start();
 		clientSender.start();
 	}
-	
-	
-	
+
 	public static class Monitor {
 		boolean cts = false;
 

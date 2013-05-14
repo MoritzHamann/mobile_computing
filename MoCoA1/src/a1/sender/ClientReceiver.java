@@ -13,11 +13,14 @@ public class ClientReceiver implements Runnable {
 	private String sourceIP;
 	private int port;
 	private Monitor monitor = null;
+	private int ctsTimeout;
 
-	public ClientReceiver(String sourceIP, int port, Monitor monitor) {
+	public ClientReceiver(String sourceIP, int port, int ctsTimeout,
+			Monitor monitor) {
 		this.sourceIP = sourceIP;
 		this.port = port;
 		this.monitor = monitor;
+		this.ctsTimeout = ctsTimeout;
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class ClientReceiver implements Runnable {
 					} else {
 						System.out.println("CTS nicht an mich erhalten warte");
 						synchronized (monitor) {
-							monitor.wait(1000);
+							monitor.wait(ctsTimeout);
 						}
 					}
 					break;

@@ -11,11 +11,12 @@ public class MainServer {
 	 */
 	public static void main(String[] args) {
 
-		Thread receiver = new Thread(new ServerReceiver(7000, "192.168.1.1", log));
+		Thread receiver = new Thread(new ServerReceiver(7000, "192.168.1.1",
+				log));
 		receiver.start();
-		}
-	
+	}
+
 	public void testname() throws Exception {
-		
+
 	}
 }
