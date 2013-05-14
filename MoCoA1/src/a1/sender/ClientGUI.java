@@ -79,7 +79,7 @@ public class ClientGUI {
 		frame.getContentPane().add(lblLambda);
 
 		final JFormattedTextField frmtdtxtfldLambda = new JFormattedTextField();
-		frmtdtxtfldLambda.setText("35");
+		frmtdtxtfldLambda.setText("50");
 		frmtdtxtfldLambda.setPreferredSize(new Dimension(40, 20));
 		frame.getContentPane().add(frmtdtxtfldLambda);
 
