@@ -36,7 +36,7 @@ public class ServerReceiver implements Runnable {
 			serverSocket.setBroadcast(true);
 			// allocate space for received datagram
 			byte[] data = new byte[1472];
-			while (true) {
+			while (!Thread.currentThread().isInterrupted()) {
 				DatagramPacket packet = new DatagramPacket(data, data.length);
 				// receive one datagram
 				serverSocket.receive(packet);

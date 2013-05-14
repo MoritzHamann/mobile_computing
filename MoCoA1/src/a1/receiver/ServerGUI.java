@@ -21,6 +21,7 @@ public class ServerGUI {
 
 	private JFrame frame;
 	private static HashMap<String, ArrayList<Integer>> log = new HashMap<String, ArrayList<Integer>>();
+	private static Thread receiver;
 
 	/**
 	 * Launch the application.
@@ -31,7 +32,7 @@ public class ServerGUI {
 				try {
 					ServerGUI window = new ServerGUI();
 					window.frame.setVisible(true);
-					Thread receiver = new Thread(new ServerReceiver(7000,
+					receiver = new Thread(new ServerReceiver(7000,
 							"192.168.1.1", log));
 					receiver.start();
 				} catch (Exception e) {
@@ -86,8 +87,25 @@ public class ServerGUI {
 		JButton btnNewButton_1 = new JButton("Stop");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				receiver.interrupt();
+				while (receiver.getState() != Thread.State.TERMINATED) {
+
+				}
 				frame.dispose();
 				System.out.println(log.size());
+				for (String ip : log.keySet()) {
+					System.out.println(ip);
+					ArrayList<Integer> receivedPackages = log.get(ip);
+					int lastPackage = 0;
+					for (int i = 0; i < receivedPackages.size(); i++) {
+						if (receivedPackages.get(i) >= lastPackage) {
+							lastPackage = receivedPackages.get(i);
+						}
+					}
+					System.out.println("Last Package " + lastPackage);
+					System.out.println(ip + "Packetverlust = " + (lastPackage - receivedPackages.size()));
+				}
+				
 				System.out.println("beende");
 				System.exit(0);
 			}
