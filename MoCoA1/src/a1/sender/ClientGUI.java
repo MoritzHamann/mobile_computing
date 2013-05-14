@@ -1,4 +1,4 @@
-package a1.receiver;
+package a1.sender;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -6,23 +6,21 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-public class ServerGUI {
+public class ClientGUI {
 
 	private JFrame frame;
-	private static HashMap<String, ArrayList<Integer>> log = new HashMap<String, ArrayList<Integer>>();
-	private static Thread receiver;
-	private static long startTime;
+
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -31,9 +29,8 @@ public class ServerGUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ServerGUI window = new ServerGUI();
+					ClientGUI window = new ClientGUI();
 					window.frame.setVisible(true);
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -44,7 +41,7 @@ public class ServerGUI {
 	/**
 	 * Create the application.
 	 */
-	public ServerGUI() {
+	public ClientGUI() {
 		initialize();
 	}
 
@@ -53,10 +50,18 @@ public class ServerGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 599, 322);
+		frame.setBounds(100, 100, 681, 322);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(
 				new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JLabel lblSource = new JLabel("Source");
+		frame.getContentPane().add(lblSource);
+
+		textField = new JTextField();
+		textField.setText("192.168.1.2");
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
 
 		JLabel lblDestinationIp = new JLabel("Destination IP");
 		frame.getContentPane().add(lblDestinationIp);
@@ -93,32 +98,6 @@ public class ServerGUI {
 		JButton btnNewButton_1 = new JButton("Stop");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				receiver.interrupt();
-				while (receiver.getState() != Thread.State.TERMINATED) {
-
-				}
-				long endTime = System.currentTimeMillis();
-				frame.dispose();
-				for (String ip : log.keySet()) {
-					ArrayList<Integer> receivedPackages = log.get(ip);
-					int lastPackage = 0;
-					for (int i = 0; i < receivedPackages.size(); i++) {
-						if (receivedPackages.get(i) >= lastPackage) {
-							lastPackage = receivedPackages.get(i);
-						}
-					}
-					
-					System.out.println(ip + "Last Package " + lastPackage);
-					int lostPackages = lastPackage - receivedPackages.size();
-					System.out.println(ip + "Packetverlust = " + lostPackages);
-					
-					long timeDuration = (endTime - startTime) / 1000;
-					System.out.println("Zeitspanne " + timeDuration);
-					System.out.println("Packetverlust pro Sekunde "
-							+ (lostPackages / timeDuration));
-				}
-
-				System.out.println("beende");
 				System.exit(0);
 			}
 		});
@@ -126,11 +105,13 @@ public class ServerGUI {
 		JButton btnNewButton_2 = new JButton("Start");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				receiver = new Thread(new ServerReceiver(7000, "192.168.1.1",
-						log));
-				receiver.start();
-				startTime = System.currentTimeMillis();
-
+				String sourceIP = textField.getText();
+				String destIP = frmtdtxtfldIpadresse.getText();
+				int lambda = Integer.valueOf(frmtdtxtfldLambda.getText());
+				int rtsTimeout = Integer.valueOf(frmtdtxtfldRts.getText());
+				MainClient client = new MainClient(sourceIP, destIP, lambda,
+						rtsTimeout);
+				client.startClient();
 			}
 		});
 		frame.getContentPane().add(btnNewButton_2);

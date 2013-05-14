@@ -2,12 +2,23 @@ package a1.sender;
 
 public class MainClient {
 	public static Monitor monitor = new Monitor();
-	
-	public static void main(String[] args) {
-		Thread clientSender = new Thread(new ClientSender("192.168.1.2",
-				"192.168.1.1", 7000, 100, 35, monitor));
+	private String destIP;
+	private String sourceIP;
+	private int lambda;
+	private int rtsTimeout;
+
+	public MainClient(String sourceIP, String destIP, int lambda, int rtsTimeout ) {
+		this.destIP = destIP;
+		this.lambda = lambda;
+		this.rtsTimeout = rtsTimeout;
+		this.sourceIP = sourceIP;
+		
+	}
+	public void startClient() {
+		Thread clientSender = new Thread(new ClientSender(sourceIP,
+				destIP, 7000, rtsTimeout, lambda, monitor));
 		Thread clientReceiver = new Thread(new ClientReceiver(
-				"192.168.1.2", 7000, monitor));
+				sourceIP, 7000, monitor));
 		clientReceiver.start();
 		clientSender.start();
 	}

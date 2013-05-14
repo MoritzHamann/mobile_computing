@@ -42,7 +42,7 @@ public class ServerReceiver implements Runnable {
 				serverSocket.receive(packet);
 				a1.ressources.Package p = deserializePackage(packet.getData());
 				System.out.println("Packet Id des empfangenen Pakets "
-						+ p.getId());
+						+ p.getId() + " von " + p.getSourceIP());
 				switch (p.getId()) {
 				case 0:
 					// send cts
@@ -65,12 +65,14 @@ public class ServerReceiver implements Runnable {
 							sendBuf.length,
 							InetAddress.getByName("192.168.1.255"), port);
 					serverSocket.send(sendPackage);
-					System.out.println("cts gesendet");
+					System.out.println("Sende CTS für " + p.getDestIP()
+							+ "an alle");
 					break;
 				case 1:
 					break;
 				case 2:
-					System.out.println("Datenpaket erhalten");
+					System.out.println("Datenpaket erhalten von "
+							+ p.getSourceIP());
 					ArrayList<Integer> packages = log.get(p.getSourceIP());
 					if (packages != null) {
 						packages.add(p.getSeqNumber());
@@ -97,7 +99,6 @@ public class ServerReceiver implements Runnable {
 		ObjectInputStream is = new ObjectInputStream(new BufferedInputStream(
 				byteStream));
 		a1.ressources.Package o = (a1.ressources.Package) is.readObject();
-		System.out.println("id " + o.getId());
 		is.close();
 		return o;
 	}
