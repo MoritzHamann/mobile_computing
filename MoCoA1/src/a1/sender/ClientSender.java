@@ -20,6 +20,11 @@ public class ClientSender implements Runnable {
 	private String sourceIP;
 	private int port;
 	private Monitor monitor = null;
+	private int seqNumber = 0;
+
+	public int getSeqNumber() {
+		return seqNumber;
+	}
 
 	public ClientSender(String sourceIP, String destIP, int port,
 			int rtsTimeout, int lambda, Monitor monitor) {
@@ -34,7 +39,7 @@ public class ClientSender implements Runnable {
 	@Override
 	public void run() {
 		DatagramSocket clientSocket = null;
-		int seqNumber = 0;
+		seqNumber = 0;
 		try {
 			clientSocket = new DatagramSocket();
 			clientSocket.setBroadcast(true);
