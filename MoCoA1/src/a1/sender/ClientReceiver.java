@@ -30,7 +30,7 @@ public class ClientReceiver implements Runnable {
 				// receive one datagram
 				serverSocket.receive(packet);
 				a1.ressources.Package p = deserializePackage(packet.getData());
-				System.out.println("ID des empfangenen Pakets beim Sender " + p.getId());
+				System.out.println("ID des empfangenen Pakets " + p.getId() + " von " + p.getSourceIP());
 				switch (p.getId()) {
 				case 0:
 					break;
@@ -38,17 +38,16 @@ public class ClientReceiver implements Runnable {
 					// notify
 					if (p.getDestIP().equals(sourceIP)) {
 						synchronized (monitor) {
+							System.out.println("CTS erhalten setze CTS = True");
 							monitor.setCts(true);
 							monitor.notify();
 						}
 					} else {
-						System.out.println("kein cts an mich warte");
+						System.out.println("CTS nicht an mich erhalten warte");
 						synchronized (monitor) {
-							monitor.wait(2000);
+							monitor.wait(1000);
 						}
 					}
-					break;
-				default:
 					break;
 				}
 			}

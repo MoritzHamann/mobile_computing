@@ -45,7 +45,7 @@ public class ClientSender implements Runnable {
 		while (true) {
 			try {
 				synchronized (this) {
-					wait(1000);
+					wait(500);
 					// wait((long) (-1 / lambda * Math.log(Math.random())));
 				}
 
@@ -63,13 +63,13 @@ public class ClientSender implements Runnable {
 				// paket
 				DatagramPacket packet = createBytePackage(rtsPackage);
 				clientSocket.send(packet);
-				System.out.println("warte auf cts");
+				System.out.println("RTS gesendet warte auf Bestätigung");
 				synchronized (monitor) {
 					monitor.wait(rtsTimeout);
 				}
 				if (monitor.isCts()) {
 					// data package
-					System.out.println("sende Datenpaket cts erhalten");
+					System.out.println("CTS erhalten sende Datenpaket mit Nummer " + seqNumber);
 					Package dataPackage = new Package();
 					dataPackage.setSeqNumber(seqNumber);
 					dataPackage.setId(2);
