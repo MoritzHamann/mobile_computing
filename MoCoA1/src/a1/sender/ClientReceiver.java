@@ -30,7 +30,8 @@ public class ClientReceiver implements Runnable {
 				// receive one datagram
 				serverSocket.receive(packet);
 				a1.ressources.Package p = deserializePackage(packet.getData());
-				System.out.println("ID des empfangenen Pakets " + p.getId() + " von " + p.getSourceIP());
+				System.out.println("ID des empfangenen Pakets " + p.getId()
+						+ " von " + p.getSourceIP());
 				switch (p.getId()) {
 				case 0:
 					break;

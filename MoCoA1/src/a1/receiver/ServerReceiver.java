@@ -16,14 +16,17 @@ import java.util.HashMap;
 import a1.ressources.Package;
 
 public class ServerReceiver implements Runnable {
-	private HashMap<String, ArrayList<Integer>> log = new HashMap<String, ArrayList<Integer>>();
+	// private HashMap<String, ArrayList<Integer>> log = new HashMap<String,
+	// ArrayList<Integer>>();
 	private int port;
 	private String sourceIP;
+	private HashMap<String, ArrayList<Integer>> log;
 
-	public ServerReceiver(int port, String sourceIP) {
-		// TODO Auto-generated constructor stub
+	public ServerReceiver(int port, String sourceIP,
+			HashMap<String, ArrayList<Integer>> log) {
 		this.port = port;
 		this.sourceIP = sourceIP;
+		this.log = log;
 	}
 
 	@Override
@@ -83,7 +86,6 @@ public class ServerReceiver implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -5,7 +5,7 @@ public class MainClient {
 	
 	public static void main(String[] args) {
 		Thread clientSender = new Thread(new ClientSender("192.168.1.2",
-				"192.168.1.1", 7000, 100, 10, monitor));
+				"192.168.1.1", 7000, 100, 35, monitor));
 		Thread clientReceiver = new Thread(new ClientReceiver(
 				"192.168.1.2", 7000, monitor));
 		clientReceiver.start();

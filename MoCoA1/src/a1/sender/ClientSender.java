@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.xml.bind.ParseConversionEvent;
+
 import a1.ressources.Package;
 import a1.sender.MainClient.Monitor;
 
@@ -45,8 +47,13 @@ public class ClientSender implements Runnable {
 		while (true) {
 			try {
 				synchronized (this) {
-					wait(500);
-					// wait((long) (-1 / lambda * Math.log(Math.random())));
+					double random;
+					do {
+						random = Math.random();
+					} while (random != 0);
+					long waitingTime = (long) ((-1.0 / lambda) * random);
+					System.out.println("Warte vor Senden für " + waitingTime);
+					wait(waitingTime);
 				}
 
 			} catch (InterruptedException e1) {
@@ -69,7 +76,9 @@ public class ClientSender implements Runnable {
 				}
 				if (monitor.isCts()) {
 					// data package
-					System.out.println("CTS erhalten sende Datenpaket mit Nummer " + seqNumber);
+					System.out
+							.println("CTS erhalten sende Datenpaket mit Nummer "
+									+ seqNumber);
 					Package dataPackage = new Package();
 					dataPackage.setSeqNumber(seqNumber);
 					dataPackage.setId(2);
