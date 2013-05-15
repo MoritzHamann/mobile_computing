@@ -49,10 +49,12 @@ public class ClientSender implements Runnable {
 		while (true) {
 			try {
 				synchronized (this) {
+					//number between 0 and < 1
 					double random = Math.random();
 					long waitingTime;
 					do {
 						random = Math.random();
+						//calculate waiting time until it is not 0 
 						waitingTime = (long) ((-1.0 / lambda)
 								* Math.log(random) * 1000);
 					} while (waitingTime <= 0);
