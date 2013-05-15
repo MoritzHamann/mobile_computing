@@ -21,6 +21,7 @@ public class ClientSender implements Runnable {
 	private int port;
 	private Monitor monitor = null;
 	private int seqNumber = 1;
+	private boolean notInterrupted = true;
 
 	public int getSeqNumber() {
 		return seqNumber;
@@ -46,7 +47,7 @@ public class ClientSender implements Runnable {
 			e2.printStackTrace();
 		}
 		// send one datagram
-		while (true) {
+		while (notInterrupted) {
 			try {
 				synchronized (this) {
 					//number between 0 and < 1
@@ -63,8 +64,7 @@ public class ClientSender implements Runnable {
 				}
 
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				notInterrupted = false;
 			}
 			try {
 				Package rtsPackage = new Package();
@@ -105,8 +105,7 @@ public class ClientSender implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				notInterrupted = false;
 			}
 		}
 	}

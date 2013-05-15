@@ -14,6 +14,7 @@ public class ClientReceiver implements Runnable {
 	private int port;
 	private Monitor monitor = null;
 	private int ctsTimeout;
+	private boolean notInterrupted = true;
 
 	public ClientReceiver(String sourceIP, int port, int ctsTimeout,
 			Monitor monitor) {
@@ -28,7 +29,7 @@ public class ClientReceiver implements Runnable {
 		try {
 			DatagramSocket serverSocket = new DatagramSocket(port);
 			byte[] data = new byte[1472];
-			while (true) {
+			while (notInterrupted) {
 				DatagramPacket packet = new DatagramPacket(data, data.length);
 				// receive one datagram
 				serverSocket.receive(packet);
@@ -61,7 +62,7 @@ public class ClientReceiver implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			notInterrupted = false;
 			e.printStackTrace();
 		}
 	}

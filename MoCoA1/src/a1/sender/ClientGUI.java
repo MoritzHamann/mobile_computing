@@ -109,7 +109,7 @@ public class ClientGUI {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				textArea.append("Beende");
-				//System.exit(0);
+				client.getClientReceiver().interrupt();
 				client.getClientSender().interrupt();
 			}
 		});
@@ -124,11 +124,11 @@ public class ClientGUI {
 				int ctsTimeout = Integer.valueOf(textField_1.getText());
 				client = new MainClient(sourceIP, destIP, lambda,
 						rtsTimeout, ctsTimeout);
-				//client.startClient();
-				//textArea.append("Starte Senden mit MACA \n");
+				client.startClient();
+				textArea.append("Starte Senden mit MACA \n");
 				//switch between normal client and client without maca
-				client.startClientWithoutMaca();
-				textArea.append("Starte Senden ohne MACA \n");
+//				client.startClientWithoutMaca();
+//				textArea.append("Starte Senden ohne MACA \n");
 			}
 		});
 		frame.getContentPane().add(btnNewButton_2);
