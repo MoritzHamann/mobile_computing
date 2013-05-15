@@ -20,6 +20,9 @@ import javax.swing.border.LineBorder;
 public class ServerGUI {
 
 	private JFrame frame;
+	/**
+	 * ip as key and arrayList of sequence number for received packages 
+	 */
 	private static HashMap<String, ArrayList<Integer>> log = new HashMap<String, ArrayList<Integer>>();
 	private static Thread receiver;
 	private static long startTime;
@@ -68,34 +71,21 @@ public class ServerGUI {
 		frmtdtxtfldIpadresse.setHorizontalAlignment(SwingConstants.LEFT);
 		frame.getContentPane().add(frmtdtxtfldIpadresse);
 
-		JLabel lblLambda = new JLabel("Lambda");
-		frame.getContentPane().add(lblLambda);
-
-		final JFormattedTextField frmtdtxtfldLambda = new JFormattedTextField();
-		frmtdtxtfldLambda.setText("35");
-		frmtdtxtfldLambda.setPreferredSize(new Dimension(40, 20));
-		frame.getContentPane().add(frmtdtxtfldLambda);
-
-		JLabel lblRtsDelay = new JLabel("RTS Delay");
-		frame.getContentPane().add(lblRtsDelay);
-
-		final JFormattedTextField frmtdtxtfldRts = new JFormattedTextField();
-		frmtdtxtfldRts.setText("100");
-		frmtdtxtfldRts.setPreferredSize(new Dimension(40, 20));
-		frmtdtxtfldRts.setMinimumSize(new Dimension(20, 20));
-		frame.getContentPane().add(frmtdtxtfldRts);
-
-		JTextArea textArea = new JTextArea();
-		textArea.setBorder(new LineBorder(new Color(0, 0, 0)));
-		textArea.setPreferredSize(new Dimension(500, 250));
-		textArea.setEditable(false);
-		frame.getContentPane().add(textArea);
+		JButton btnNewButton_2 = new JButton("Start");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				receiver = new Thread(new ServerReceiver(7000, "192.168.1.1",
+						log));
+				receiver.start();
+				startTime = System.currentTimeMillis();
+			}
+		});
+		frame.getContentPane().add(btnNewButton_2);
 		JButton btnNewButton_1 = new JButton("Stop");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				receiver.interrupt();
 				while (receiver.getState() != Thread.State.TERMINATED) {
-
 				}
 				long endTime = System.currentTimeMillis();
 				frame.dispose();
@@ -107,35 +97,24 @@ public class ServerGUI {
 							lastPackage = receivedPackages.get(i);
 						}
 					}
-					
 					System.out.println(ip + "Last Package " + lastPackage);
 					int lostPackages = lastPackage - receivedPackages.size();
 					System.out.println(ip + "Packetverlust = " + lostPackages);
-					
+
 					long timeDuration = (endTime - startTime) / 1000;
 					System.out.println("Zeitspanne " + timeDuration);
 					System.out.println("Packetverlust pro Sekunde "
 							+ (lostPackages / timeDuration));
 				}
-
 				System.out.println("beende");
 				System.exit(0);
 			}
 		});
-
-		JButton btnNewButton_2 = new JButton("Start");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				receiver = new Thread(new ServerReceiver(7000, "192.168.1.1",
-						log));
-				receiver.start();
-				startTime = System.currentTimeMillis();
-
-			}
-		});
-		frame.getContentPane().add(btnNewButton_2);
 		frame.getContentPane().add(btnNewButton_1);
-
+		JTextArea textArea = new JTextArea();
+		textArea.setBorder(new LineBorder(new Color(0, 0, 0)));
+		textArea.setPreferredSize(new Dimension(500, 250));
+		textArea.setEditable(false);
+		frame.getContentPane().add(textArea);
 	}
-
 }
