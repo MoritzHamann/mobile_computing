@@ -20,8 +20,10 @@ import javax.swing.border.LineBorder;
 public class ServerGUI {
 
 	private JFrame frame;
+	private JButton btnNewButton_1;
+	private JTextArea textArea;
 	/**
-	 * ip as key and arrayList of sequence number for received packages 
+	 * ip as key and arrayList of sequence number for received packages
 	 */
 	private static HashMap<String, ArrayList<Integer>> log = new HashMap<String, ArrayList<Integer>>();
 	private static Thread receiver;
@@ -73,47 +75,73 @@ public class ServerGUI {
 		JButton btnNewButton_2 = new JButton("Start");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				receiver = new Thread(new ServerReceiver(7000, "192.168.1.1",
-						log));
-				receiver.start();
+				String sourceIP = frmtdtxtfldIpadresse.getText();
+				receiver = new Thread(new ServerReceiver(7000, sourceIP, log));
 				startTime = System.currentTimeMillis();
+				receiver.start();
+				// for time Measurement
+				// endServer();
 			}
 		});
+
 		frame.getContentPane().add(btnNewButton_2);
-		JButton btnNewButton_1 = new JButton("Stop");
+		btnNewButton_1 = new JButton("Stop");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				receiver.interrupt();
-				while (receiver.getState() != Thread.State.TERMINATED) {
-				}
-				long endTime = System.currentTimeMillis();
-				frame.dispose();
-				for (String ip : log.keySet()) {
-					ArrayList<Integer> receivedPackages = log.get(ip);
-					int lastPackage = 0;
-					for (int i = 0; i < receivedPackages.size(); i++) {
-						if (receivedPackages.get(i) >= lastPackage) {
-							lastPackage = receivedPackages.get(i);
-						}
-					}
-					System.out.println(ip + "Last Package " + lastPackage);
-					int lostPackages = lastPackage - receivedPackages.size();
-					System.out.println(ip + "Packetverlust = " + lostPackages);
-
-					long timeDuration = (endTime - startTime) / 1000;
-					System.out.println("Zeitspanne " + timeDuration);
-					System.out.println("Packetverlust pro Sekunde "
-							+ (lostPackages / timeDuration));
-				}
-				System.out.println("beende");
-				System.exit(0);
+				// throws exception if called before start
+				endServer();
 			}
 		});
 		frame.getContentPane().add(btnNewButton_1);
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setBorder(new LineBorder(new Color(0, 0, 0)));
 		textArea.setPreferredSize(new Dimension(500, 250));
 		textArea.setEditable(false);
 		frame.getContentPane().add(textArea);
+	}
+
+	private void endServer() {
+		// for measurement
+		// while (System.currentTimeMillis() - startTime < 30000) {
+		// }
+		//get last Packages
+		receiver.interrupt();
+		int j = 0;
+		while (receiver.getState() != Thread.State.TERMINATED) {
+			// only working if something has been received therefore max break;
+			if (j > 50) {
+				break;
+			}
+			j++;
+		}
+		long endTime = System.currentTimeMillis();
+		// frame.dispose();
+		for (String ip : log.keySet()) {
+			ArrayList<Integer> receivedPackages = log.get(ip);
+			int lastPackage = 0;
+			for (int i = 0; i < receivedPackages.size(); i++) {
+				if (receivedPackages.get(i) >= lastPackage) {
+					lastPackage = receivedPackages.get(i);
+				}
+			}
+			// timespan
+			long timeDuration = (endTime - startTime) / 1000;
+			// absolute number of lost packages
+			int lostPackages = lastPackage - receivedPackages.size();
+			System.out.println("Zeitspanne: " + timeDuration);
+			System.out.println(ip + " Letztes empfangene Paket (SeqNummer): "
+					+ lastPackage);
+			System.out.println(ip + " Packetverlust: " + lostPackages);
+			System.out.println(ip + " Packetverlust pro Sekunde: "
+					+ ((double) lostPackages / timeDuration));
+			textArea.append("Zeitspanne: " + timeDuration + "\n");
+			textArea.append(ip + " Letztes empfangene Paket (SeqNummer): "
+					+ lastPackage + "\n");
+			textArea.append(ip + " Packetverlust: " + lostPackages + "\n");
+			textArea.append(ip + " Packetverlust pro Sekunde: "
+					+ ((double) lostPackages / timeDuration) + "\n");
+		}
+		System.out.println("Beende");
+		textArea.append("Beende");
 	}
 }

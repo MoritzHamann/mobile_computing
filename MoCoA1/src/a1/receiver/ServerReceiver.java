@@ -46,7 +46,7 @@ public class ServerReceiver implements Runnable {
 				switch (p.getId()) {
 				case 0:
 					// send cts
-					System.out.println("sende cts");
+					System.out.println("Sende cts");
 					Package ctsPackage = new Package();
 					ctsPackage.setId(1);
 					ctsPackage.setDestIP(p.getSourceIP());
@@ -65,8 +65,8 @@ public class ServerReceiver implements Runnable {
 							sendBuf.length,
 							InetAddress.getByName("192.168.1.255"), port);
 					serverSocket.send(sendPackage);
-					System.out.println("Sende CTS für " + p.getDestIP()
-							+ "an alle");
+					System.out.println("CTS für " + p.getDestIP()
+							+ "an alle gesendet");
 					break;
 				case 1:
 					break;
@@ -90,7 +90,6 @@ public class ServerReceiver implements Runnable {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private a1.ressources.Package deserializePackage(byte[] data)
