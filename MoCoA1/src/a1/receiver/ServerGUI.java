@@ -36,7 +36,6 @@ public class ServerGUI {
 				try {
 					ServerGUI window = new ServerGUI();
 					window.frame.setVisible(true);
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

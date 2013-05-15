@@ -19,7 +19,6 @@ import javax.swing.border.LineBorder;
 public class ClientGUI {
 
 	private JFrame frame;
-
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextArea textArea;
