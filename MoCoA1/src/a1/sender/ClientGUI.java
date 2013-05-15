@@ -22,6 +22,7 @@ public class ClientGUI {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextArea textArea;
+	private MainClient client;
 
 	/**
 	 * Launch the application.
@@ -107,8 +108,9 @@ public class ClientGUI {
 		JButton btnNewButton_1 = new JButton("Stop");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				textArea.setText("Beende");
-				System.exit(0);
+				textArea.append("Beende");
+				//System.exit(0);
+				client.getClientSender().interrupt();
 			}
 		});
 
@@ -120,9 +122,13 @@ public class ClientGUI {
 				int lambda = Integer.valueOf(frmtdtxtfldLambda.getText());
 				int rtsTimeout = Integer.valueOf(frmtdtxtfldRts.getText());
 				int ctsTimeout = Integer.valueOf(textField_1.getText());
-				MainClient client = new MainClient(sourceIP, destIP, lambda,
+				client = new MainClient(sourceIP, destIP, lambda,
 						rtsTimeout, ctsTimeout);
-				client.startClient();
+				//client.startClient();
+				//textArea.append("Starte Senden mit MACA \n");
+				//switch between normal client and client without maca
+				client.startClientWithoutMaca();
+				textArea.append("Starte Senden ohne MACA \n");
 			}
 		});
 		frame.getContentPane().add(btnNewButton_2);

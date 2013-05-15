@@ -7,6 +7,8 @@ public class MainClient {
 	private int lambda;
 	private int rtsTimeout;
 	private int ctsTimeout;
+	private Thread clientSender;
+	private Thread clientReceiver;
 
 	public MainClient(String sourceIP, String destIP, int lambda,
 			int rtsTimeout, int ctsTimeout) {
@@ -15,16 +17,29 @@ public class MainClient {
 		this.rtsTimeout = rtsTimeout;
 		this.sourceIP = sourceIP;
 		this.ctsTimeout = ctsTimeout;
-
 	}
 
 	public void startClient() {
-		Thread clientSender = new Thread(new ClientSender(sourceIP, destIP,
+		clientSender = new Thread(new ClientSender(sourceIP, destIP,
 				7000, rtsTimeout, lambda, monitor));
-		Thread clientReceiver = new Thread(new ClientReceiver(sourceIP, 7000,
+		clientReceiver = new Thread(new ClientReceiver(sourceIP, 7000,
 				ctsTimeout, monitor));
 		clientReceiver.start();
 		clientSender.start();
+	}
+
+	public void startClientWithoutMaca() {
+		clientSender = new Thread(new ClientSenderWithoutMaca(sourceIP, destIP,
+				7000, lambda));
+		clientSender.start();
+	}
+
+	public Thread getClientSender() {
+		return clientSender;
+	}
+
+	public Thread getClientReceiver() {
+		return clientReceiver;
 	}
 
 	public static class Monitor {
